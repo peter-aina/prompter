@@ -90,14 +90,83 @@ input[type=range]{width:100%;accent-color:var(--cue)}
 #review h2{margin:0;font-size:20px}
 #saveHint{font-size:13px;color:var(--muted);margin:0;line-height:1.4}
 @media (prefers-reduced-motion:reduce){.recording .dot{animation:none}}
+
+/* ---------- editorial studio finish ---------- */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+:root{
+  --bg:#f4f1e9;--panel:#fffdf8;--line:#ded9cd;--fg:#1c3029;--muted:#777e73;
+  --cue:#c78c54;--rec:#c94b3d;--read:"DM Sans",system-ui,sans-serif;--mono:"DM Mono",monospace;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--read)}
+#setup{padding-block:clamp(24px,5vh,56px) 38px;position:relative;isolation:isolate}
+#setup:before{content:"";position:fixed;z-index:-1;inset:0 0 auto;height:290px;background:#203b31;pointer-events:none}
+#setup:after{content:"";position:fixed;z-index:-1;top:0;right:0;width:min(46vw,440px);height:290px;opacity:.18;pointer-events:none;background:repeating-linear-gradient(135deg,transparent 0 18px,#c9a67c 19px 20px,transparent 21px 38px);mask-image:linear-gradient(110deg,transparent,#000)}
+.wrap{max-width:680px;gap:20px}
+.brand-hero{position:relative;padding:10px 4px 28px;color:#fffdf8}
+.brand-mark{display:flex;gap:4px;align-items:flex-end;height:22px;margin-bottom:21px}
+.brand-mark span{display:block;width:5px;border-radius:4px;background:#d4a16f}
+.brand-mark span:nth-child(1){height:12px}.brand-mark span:nth-child(2){height:21px}.brand-mark span:nth-child(3){height:16px}
+.eyebrow{font:11px var(--mono)!important;letter-spacing:.2em!important;color:#d4b18c!important;margin:0 0 12px!important}
+.eyebrow span{color:#718779;margin:0 7px}
+header h1{font:500 clamp(34px,7vw,48px)/1.05 "Playfair Display",Georgia,serif;letter-spacing:-.045em;margin:0}
+header h1 em{font-weight:500;color:#d9ae80}
+header .hero-copy{max-width:430px;color:#d5ddd5;font-size:14px;line-height:1.7;margin:13px 0 0}
+.field:has(#script){background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 12px 35px #27392c0b}
+label.lbl{font:500 10px var(--mono);letter-spacing:.16em;color:#8b8a7d}
+textarea{margin-top:9px;min-height:32vh;background:#faf8f2;color:#27372f;border:1px solid #e6e0d4;border-radius:11px;padding:16px;font:15px/1.8 var(--read);transition:border-color .2s,box-shadow .2s}
+textarea:focus{outline:none;border-color:#b78a5f;box-shadow:0 0 0 3px #c78c541c}
+.meta{padding:10px 2px 0;font-size:11px;color:#8b8a7d}
+.grid{gap:14px}
+.grid .field{padding:16px 17px 14px;border:1px solid var(--line);border-radius:15px;background:#ebe8df}
+.field output{display:inline-block;margin-top:8px;color:#314b3e;font-size:12px}
+input[type=range]{accent-color:#a96f3f;cursor:pointer}
+.toggles{gap:9px}
+.chip{padding:10px 13px;border:1px solid #dcd6c9;background:#ebe8df;color:#35463c;border-radius:9px;font-size:12px;transition:background .2s,border-color .2s}
+.chip:has(input:checked){background:#e2e8df;border-color:#9aaf9e}
+.chip input{accent-color:#315745}
+.go{gap:10px;margin-top:2px}
+.btn{padding:15px 20px;border-radius:10px;font-size:13px;letter-spacing:.02em;transition:transform .18s,box-shadow .18s,background .18s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px #243b2e18}
+.primary{background:#244637;color:#fffdf7;box-shadow:0 5px 12px #24463720}
+.primary:hover{background:#315844}
+.ghost{background:#e9e5da;border:1px solid #d9d2c5;color:#2b3c32}
+.note{border-left:2px solid #c78c54;padding:2px 0 2px 13px;font-size:12px;line-height:1.7;color:#72786e}
+.note b{color:#344c3e}
+#stage{background:#080d0b}
+#cue{border-color:#d9ae80}
+#cue::before{border-left-color:#d9ae80}
+#hud .pill{border:1px solid #ffffff24;background:#111b17d9;backdrop-filter:blur(12px)}
+#dock{gap:16px}
+.rb{background:#15231dd9;border-color:#ffffff32;backdrop-filter:blur(12px)}
+#recBtn{background:#111b17aa}
+#review{background:#f4f1e9;color:#1c3029}
+#review video{border:1px solid #d9d2c5;border-radius:16px;box-shadow:0 12px 35px #27392c12}
+#saveHint{color:#777e73}
+@media(min-width:700px){
+  #setup{padding-inline:28px}
+  .brand-hero{padding-top:14px;padding-bottom:32px}
+  .field:has(#script){padding:22px}
+  textarea{min-height:270px}
+}
+@media(max-width:440px){
+  #setup{padding-block:22px 28px}
+  #setup:before,#setup:after{height:260px}
+  .brand-hero{padding-bottom:21px}
+  .grid{gap:10px}
+  .grid .field{padding:13px}
+  .chip{font-size:11px;padding:9px 10px}
+}
 </style>
 </head>
 <body>
 <section id="setup">
   <div class="wrap">
-    <header>
-      <h1>Pocket Prompter</h1>
-      <p>Paste your script, pick a pace, then read it off the screen while the front camera records you.</p>
+    <header class="brand-hero">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p class="eyebrow">STUDIO TOOLS <span> / </span> 01</p>
+      <h1>Pocket <em>Prompter</em></h1>
+      <p class="hero-copy">Your words, in focus. Shape your pace, find your rhythm, and deliver naturally on camera.</p>
     </header>
 
     <div class="field">
