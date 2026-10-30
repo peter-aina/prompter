@@ -6,18 +6,18 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0d0f12">
+<meta name="theme-color" content="#191919">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
 <title>Pocket Prompter</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: one-screen app. Setup sheet -> full-bleed prompter over a dimmed selfie feed. Single dark look (studio monitor). */
 :root{
-  --bg:#0d0f12; --panel:#171a1f; --line:#2a2f37; --fg:#eef1f4; --muted:#8b939e;
-  --cue:#ffc94a; --rec:#ff4b4b;
-  --read:"Atkinson Hyperlegible",system-ui,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --bg:#191919; --panel:#262626; --raise:#333333; --line:#2e2e2e; --fg:#ffffff; --muted:#a3a3a3;
+  --cue:#eb1700; --rec:#eb1700; --info:#4b7bf5;
+  --read:"Outfit","Segoe UI",system-ui,sans-serif;
+  --mono:"Outfit","Segoe UI",system-ui,sans-serif;
   color-scheme:dark;
 }
 html,body{height:100%}
@@ -28,23 +28,24 @@ button{font:inherit;color:inherit}
 /* ---------- setup ---------- */
 #setup{height:100%;overflow-y:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 28px}
 .wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-header h1{margin:0;font-size:26px;letter-spacing:-.01em;text-wrap:balance}
-header p{margin:4px 0 0;color:var(--muted);font-size:14px;line-height:1.45}
-label.lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-textarea{width:100%;box-sizing:border-box;min-height:38vh;resize:vertical;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:14px;font:17px/1.5 var(--read)}
-.meta{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+header h1{margin:0;font-size:30px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+header p{margin:6px 0 0;color:var(--muted);font-size:16px;line-height:1.45}
+label.lbl{font-size:15px;font-weight:600;color:var(--fg)}
+textarea{width:100%;box-sizing:border-box;min-height:38vh;resize:vertical;background:var(--panel);color:var(--fg);border:0;border-radius:16px;padding:16px 18px;font:17px/1.5 var(--read)}
+.meta{display:flex;justify-content:space-between;font:14px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
-.field output{font:13px var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
+.field output{font:600 15px var(--mono);color:var(--fg);font-variant-numeric:tabular-nums}
 input[type=range]{width:100%;accent-color:var(--cue)}
 .toggles{display:flex;flex-wrap:wrap;gap:8px}
-.chip{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-size:14px;cursor:pointer}
+.chip{display:flex;align-items:center;gap:8px;padding:11px 16px;border:0;border-radius:999px;background:var(--raise);font-size:15px;font-weight:600;cursor:pointer}
 .chip input{accent-color:var(--cue);margin:0}
 .go{display:flex;gap:10px}
-.btn{flex:1;padding:15px;border-radius:14px;border:0;font-weight:700;font-size:16px;cursor:pointer}
-.primary{background:var(--cue);color:#1a1300}
-.ghost{background:var(--panel);border:1px solid var(--line)}
-.note{font-size:13px;color:var(--muted);line-height:1.45;margin:0}
+.btn{flex:1;padding:17px;border-radius:999px;border:0;font-weight:600;font-size:18px;cursor:pointer}
+.primary{background:var(--cue);color:#fff}
+.primary:active{filter:brightness(.9)}
+.ghost{background:var(--raise)}
+.note{font-size:14px;background:var(--panel);border-radius:16px;padding:14px 16px;color:var(--muted);line-height:1.45;margin:0}
 .note b{color:var(--fg)}
 
 /* ---------- prompter ---------- */
@@ -63,32 +64,44 @@ input[type=range]{width:100%;accent-color:var(--cue)}
 .fadeBot{bottom:0;height:30%;background:linear-gradient(#0000,#000e)}
 #hud{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
   padding:calc(env(safe-area-inset-top,0px) + 10px) max(14px,env(safe-area-inset-right,0px)) 10px max(14px,env(safe-area-inset-left,0px));
-  font:13px var(--mono);font-variant-numeric:tabular-nums;color:var(--fg)}
-.pill{padding:5px 10px;border-radius:999px;background:#000a;display:flex;align-items:center;gap:7px}
+  font:600 14px var(--mono);font-variant-numeric:tabular-nums;color:var(--fg)}
+.pill{padding:7px 13px;border-radius:999px;background:rgba(25,25,25,.85);display:flex;align-items:center;gap:7px}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
 .recording .dot{background:var(--rec);animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:.25}}
 #dock{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;gap:14px;
   padding:12px max(14px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(14px,env(safe-area-inset-left,0px))}
-.rb{width:48px;height:48px;border-radius:50%;border:1px solid #ffffff33;background:#000b;display:grid;place-items:center;cursor:pointer;font-size:15px;font-weight:700}
+.rb{width:50px;height:50px;border-radius:50%;border:0;background:rgba(51,51,51,.92);display:grid;place-items:center;cursor:pointer;font-size:15px;font-weight:700}
 .rb svg{width:20px;height:20px;fill:currentColor}
-#recBtn{width:72px;height:72px;border:4px solid #fff;background:transparent;padding:0}
+#recBtn{width:72px;height:72px;border:4px solid #fff;border-radius:50%;background:transparent;padding:0;cursor:pointer}
 #recBtn i{display:block;width:54px;height:54px;margin:auto;border-radius:50%;background:var(--rec);transition:all .2s}
 .recording #recBtn i{width:26px;height:26px;border-radius:6px}
 #recBtn:disabled{opacity:.35}
-#speedTag{min-width:54px;text-align:center;font:12px var(--mono)}
+#speedTag{min-width:54px;text-align:center;font:600 14px var(--mono)}
 #count{position:absolute;inset:0;display:none;place-items:center;font:700 120px var(--mono);color:var(--cue);background:#0008}
 #count.on{display:grid}
-#paused{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:12px var(--mono);letter-spacing:.2em;padding:8px 14px;border-radius:999px;background:#000c;display:none}
+#paused{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:600 15px var(--mono);padding:10px 18px;border-radius:999px;background:rgba(38,38,38,.95);display:none}
 #stage.hold #paused{display:block}
+
+/* ---------- video shape ---------- */
+.seg{display:flex;background:var(--raise);border-radius:999px;padding:4px;gap:4px;position:relative}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 0;border-radius:999px;font-weight:600;font-size:15px;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
+.seg label svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+.seg input:checked+label{background:var(--cue);color:#fff}
+.seg input:focus-visible+label{outline:2px solid #fff;outline-offset:1px}
+.hint{margin:0;font-size:14px;color:var(--muted);line-height:1.4}
+#frame{position:absolute;border:2px dashed rgba(255,255,255,.75);border-radius:8px;pointer-events:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.5);display:none}
+#frame.on{display:block}
+#shapeTag{font-weight:600}
 
 /* ---------- review ---------- */
 #review{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;gap:14px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 20px}
 #review.on{display:flex}
-#review video{flex:1;min-height:0;width:100%;border-radius:14px;background:#000;object-fit:contain}
-#review h2{margin:0;font-size:20px}
-#saveHint{font-size:13px;color:var(--muted);margin:0;line-height:1.4}
+#review video{flex:1;min-height:0;width:100%;border-radius:16px;background:#000;object-fit:contain}
+#review h2{margin:0;font-size:28px;font-weight:700}
+#saveHint{font-size:15px;color:var(--muted);margin:0;line-height:1.4}
 @media (prefers-reduced-motion:reduce){.recording .dot{animation:none}}
 </style>
 </head>
@@ -127,6 +140,16 @@ Thanks for watching. I'd love to talk.</textarea>
       </div>
     </div>
 
+    <div class="field">
+      <span class="lbl" id="shapeLbl">Video shape</span>
+      <div class="seg" role="radiogroup" aria-labelledby="shapeLbl">
+        <input type="radio" name="shape" id="shapeAuto" value="auto" checked><label for="shapeAuto"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Auto</label>
+        <input type="radio" name="shape" id="shapePortrait" value="portrait"><label for="shapePortrait"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/></svg>Portrait</label>
+        <input type="radio" name="shape" id="shapeLandscape" value="landscape"><label for="shapeLandscape"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="2"/></svg>Landscape</label>
+      </div>
+      <p class="hint" id="shapeHint">Auto records the way you're holding the phone when you press record.</p>
+    </div>
+
     <div class="toggles">
       <label class="chip"><input id="useCam" type="checkbox" checked> Camera + record</label>
       <label class="chip"><input id="countdown" type="checkbox" checked> 3-second countdown</label>
@@ -136,20 +159,22 @@ Thanks for watching. I'd love to talk.</textarea>
     <div class="go">
       <button class="btn primary" id="start" type="button">Start</button>
     </div>
-    <p class="note" id="camNote"><b>Tips:</b> tap the screen to pause, drag to scroll back. The yellow line near the top is your reading line; keep it close to the lens so your eyes stay on camera.</p>
+    <p class="note" id="camNote"><b>Tips</b><br> tap the screen to pause, drag to scroll back. The red line near the top is your reading line; keep it close to the lens so your eyes stay on camera.</p>
   </div>
 </section>
 
 <section id="stage">
   <video id="cam" playsinline muted autoplay></video>
+  <div id="frame"></div>
   <div id="viewport"><div id="scroller"><div class="txt" id="txt"></div></div></div>
   <div class="fadeTop"></div><div class="fadeBot"></div>
   <div id="cue"></div>
   <div id="hud">
     <span class="pill"><span class="dot"></span><span id="clock">0:00</span></span>
+    <span class="pill" id="shapeTag">Portrait</span>
     <span class="pill" id="pct">0%</span>
   </div>
-  <div id="paused">PAUSED</div>
+  <div id="paused">Paused</div>
   <div id="dock">
     <button class="rb" id="exit" type="button" aria-label="Back to script"><svg viewBox="0 0 24 24"><path d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg></button>
     <button class="rb" id="slower" type="button" aria-label="Slower">−</button>
@@ -193,10 +218,35 @@ Thanks for watching. I'd love to talk.</textarea>
   }
   ['input','change'].forEach(ev=>document.addEventListener(ev,e=>{
     const t=e.target; if(!t.id) return;
+    if(t.name==='shape'){ store.set('pp_shape',t.value); updateShapeHint(); return; }
     store.set('pp_'+t.id, t.type==='checkbox' ? (t.checked?'1':'0') : t.value);
     refreshMeta();
   }));
   refreshMeta();
+
+  // ---------- video shape ----------
+  const savedShape=store.get('pp_shape');
+  if(savedShape){ const r=document.querySelector('input[name=shape][value="'+savedShape+'"]'); if(r) r.checked=true; }
+  const shapeChoice=()=>document.querySelector('input[name=shape]:checked').value;
+  const screenShape=()=>innerWidth>innerHeight?'landscape':'portrait';
+  let lockedShape=null;                       // fixed for the length of a take
+  const activeShape=()=>lockedShape || (shapeChoice()==='auto'?screenShape():shapeChoice());
+  function updateShapeHint(){
+    const c=shapeChoice();
+    $('shapeHint').textContent = c==='auto' ? "Auto records the way you're holding the phone when you press record."
+      : c==='portrait' ? 'Records tall 9:16 video, the shape for Reels, TikTok and Stories.'
+      : 'Records wide 16:9 video, the shape for YouTube and presentations.';
+  }
+  updateShapeHint();
+  function updateFrame(){
+    const shp=activeShape(), W=innerWidth, H=innerHeight, f=$('frame');
+    $('shapeTag').textContent = (shp==='portrait'?'Portrait':'Landscape') + (lockedShape?'':shapeChoice()==='auto'?' · Auto':'');
+    if((shp==='landscape')===(W>H)){ f.classList.remove('on'); return; }
+    const ar = shp==='portrait' ? 9/16 : 16/9;
+    let w=W, h=W/ar; if(h>H){ h=H; w=H*ar; }
+    Object.assign(f.style,{width:w+'px',height:h+'px',left:(W-w)/2+'px',top:(H-h)/2+'px'});
+    f.classList.add('on');
+  }
 
   // ---------- prompter state ----------
   const stage=$('stage'), scroller=$('scroller'), viewport=$('viewport'), cue=$('cue');
@@ -241,7 +291,7 @@ Thanks for watching. I'd love to talk.</textarea>
     if(!$('useCam').checked || !navigator.mediaDevices?.getUserMedia) return false;
     try{
       stream = await navigator.mediaDevices.getUserMedia({
-        video:{facingMode:'user',width:{ideal:1080},height:{ideal:1920}},
+        video:{facingMode:'user',width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:30}},
         audio:{echoCancellation:true,noiseSuppression:true}
       });
       $('cam').srcObject=stream; $('cam').hidden=false;
@@ -255,6 +305,35 @@ Thanks for watching. I'd love to talk.</textarea>
     return opts.find(t=>window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || '';
   }
 
+  // Draw the camera into a canvas of the chosen shape and record that,
+  // so the file is portrait or landscape no matter what the camera sends.
+  let drawRaf=0, canvasStream=null;
+  function shapedStream(){
+    const v=$('cam');
+    if(!v.videoWidth || !HTMLCanvasElement.prototype.captureStream) return null;
+    const long=Math.min(1920, Math.max(v.videoWidth, v.videoHeight));
+    const short=Math.round(long*9/16/2)*2;
+    const c=document.createElement('canvas');
+    if(lockedShape==='portrait'){ c.width=short; c.height=long; } else { c.width=long; c.height=short; }
+    const ctx=c.getContext('2d');
+    const draw=()=>{
+      const vw=v.videoWidth, vh=v.videoHeight;
+      if(vw && vh){
+        const s=Math.max(c.width/vw, c.height/vh), sw=c.width/s, sh=c.height/s;
+        ctx.drawImage(v,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);
+      }
+      drawRaf=requestAnimationFrame(draw);
+    };
+    draw();
+    canvasStream=c.captureStream(30);
+    stream.getAudioTracks().forEach(t=>canvasStream.addTrack(t));
+    return canvasStream;
+  }
+  function stopShaped(){
+    cancelAnimationFrame(drawRaf); drawRaf=0;
+    canvasStream?.getVideoTracks().forEach(t=>t.stop()); canvasStream=null;
+  }
+
   // ---------- start / exit ----------
   $('start').onclick = async ()=>{
     $('txt').textContent=script.value.trim()||'Add your script first.';
@@ -262,7 +341,7 @@ Thanks for watching. I'd love to talk.</textarea>
     stage.classList.toggle('mirror',$('mirror').checked);
     $('speedTag').textContent=speed.value+'×';
     stage.classList.add('on'); $('setup').hidden=true;
-    pos=0; setPlaying(false); layout();
+    pos=0; setPlaying(false); layout(); updateFrame();
     cancelAnimationFrame(raf); lastT=0; raf=requestAnimationFrame(tick);
     try{ wake=await navigator.wakeLock?.request('screen'); }catch{}
     const ok=await openCamera();
@@ -278,10 +357,10 @@ Thanks for watching. I'd love to talk.</textarea>
     try{ wake?.release(); }catch{} wake=null;
     stage.classList.remove('on','recording'); $('setup').hidden=false;
   }
-  window.addEventListener('resize',()=>{ if(stage.classList.contains('on')) layout(); });
+  window.addEventListener('resize',()=>{ if(stage.classList.contains('on')){ layout(); updateFrame(); } });
   document.addEventListener('visibilitychange',async()=>{ if(document.visibilityState==='visible' && stage.classList.contains('on')){ try{ wake=await navigator.wakeLock?.request('screen'); }catch{} } });
 
-  function flash(msg){ $('paused').textContent=msg; stage.classList.add('hold'); setTimeout(()=>{ $('paused').textContent='PAUSED'; },2600); }
+  function flash(msg){ $('paused').textContent=msg; stage.classList.add('hold'); setTimeout(()=>{ $('paused').textContent='Paused'; },2600); }
 
   // ---------- countdown + record ----------
   function countdown(){
@@ -299,10 +378,13 @@ Thanks for watching. I'd love to talk.</textarea>
     pos=0; apply(); setPlaying(false);
     await countdown();
     $('recBtn').disabled=false;
+    lockedShape = shapeChoice()==='auto' ? screenShape() : shapeChoice();
+    updateFrame();
     if(hasCam && stream){
       chunks=[]; const type=pickType();
-      try{ recorder=new MediaRecorder(stream, type?{mimeType:type,videoBitsPerSecond:5e6}:undefined); }
-      catch{ recorder=new MediaRecorder(stream); }
+      const src=shapedStream() || stream;
+      try{ recorder=new MediaRecorder(src, type?{mimeType:type,videoBitsPerSecond:6e6}:undefined); }
+      catch{ recorder=new MediaRecorder(src); }
       recorder.ondataavailable=e=>{ if(e.data.size) chunks.push(e.data); };
       recorder.onstop=onRecorded;
       recorder.start(1000);
@@ -318,9 +400,11 @@ Thanks for watching. I'd love to talk.</textarea>
     keepTake=keep;
     clearInterval(clockTimer); setPlaying(false);
     stage.classList.remove('recording');
+    lockedShape=null; updateFrame();
     if(recorder && recorder.state!=='inactive') recorder.stop(); else recorder=null;
   }
   function onRecorded(){
+    stopShaped();
     const type=recorder.mimeType||'video/webm'; recorder=null;
     if(!keepTake || !chunks.length) return;
     blob=new Blob(chunks,{type});
